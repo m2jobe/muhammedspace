@@ -1,9 +1,9 @@
-import TWEEN from '@tweenjs/tween.js';
+import TWEEN from "@tweenjs/tween.js";
 
 // This object contains the state of the app
 export default {
   isDev: false,
-  isShowingStats: true,
+  isShowingStats: false,
   isLoaded: false,
   isTweening: false,
   isRotating: true,
@@ -14,59 +14,75 @@ export default {
   easing: TWEEN.Easing.Quadratic.InOut,
   duration: 500,
   model: {
-    selected: 0,
-    initialTypes: ['gltf', 'object'],
-    type: 'gltf'
+    selected: 2,
+    initialTypes: ["gltf", "object"],
+    type: "gltf",
   },
   models: [
     {
-      path: './assets/models/duck.gltf',
+      path: "./assets/models/duck.gltf",
       scale: 20,
-      type: 'gltf'
+      type: "gltf",
     },
     {
-      path: './assets/models/Teapot.json',
+      path: "./assets/models/Teapot.json",
       scale: 20,
-      type: 'object'
-    }
+      type: "object",
+    },
+    {
+      path: "./assets/models/mailbox/scene.gltf",
+      scale: 0.04,
+      type: "gltf",
+      position: {
+        x: -4,
+        y: 2,
+        z: 28,
+      },
+      rotation: {
+        x: 0,
+        y: -Math.PI,
+        z: 0,
+      },
+    },
   ],
   texture: {
-    path: './assets/textures/',
+    path: "./assets/textures/",
     imageFiles: [
-      { name: 'UV', image: 'UV_Grid_Sm.jpg' }
-    ]
+      { name: "UV", image: "UV_Grid_Sm.jpg" },
+      { name: "Water", image: "waternormals.jpg" },
+    ],
   },
   mesh: {
-    enableHelper: true,
+    enableHelper: false,
     wireframe: false,
     translucent: false,
     material: {
       color: 0xffffff,
-      emissive: 0xffffff
-    }
+      emissive: 0xffffff,
+    },
   },
   fog: {
     color: 0xffffff,
-    near: 0.0008
+    near: 0.0008,
   },
   camera: {
-    fov: 40,
-    near: 2,
-    far: 1000,
-    aspect: 1,
-    posX: 0,
+    fov: 55,
+    near: 1,
+    far: 20000,
+    aspect: window.innerWidth / window.innerHeight,
+    posX: 30,
     posY: 30,
-    posZ: 40
+    posZ: 100,
   },
   controls: {
-    autoRotate: true,
+    autoRotate: false,
     autoRotateSpeed: -0.5,
     rotateSpeed: 0.5,
-    zoomSpeed: 0.8,
-    minDistance: 200,
-    maxDistance: 600,
+    zoomSpeed: 1,
+    minDistance: -Infinity,
+    maxDistance: Infinity,
     minPolarAngle: Math.PI / 5,
-    maxPolarAngle: Math.PI / 2,
+    maxPolarAngle: Infinity,
     minAzimuthAngle: -Infinity,
     maxAzimuthAngle: Infinity,
     enableDamping: true,
@@ -74,13 +90,13 @@ export default {
     enableZoom: true,
     target: {
       x: 0,
-      y: 0,
-      z: 0
-    }
+      y: 10,
+      z: 0,
+    },
   },
   ambientLight: {
     enabled: true,
-    color: 0x141414
+    color: 0x141414,
   },
   directionalLight: {
     enabled: true,
@@ -88,7 +104,7 @@ export default {
     intensity: 0.4,
     x: -75,
     y: 280,
-    z: 150
+    z: 150,
   },
   shadow: {
     enabled: true,
@@ -101,7 +117,7 @@ export default {
     top: 100,
     right: 100,
     bottom: -100,
-    left: -100
+    left: -100,
   },
   pointLight: {
     enabled: true,
@@ -110,7 +126,7 @@ export default {
     distance: 115,
     x: 0,
     y: 0,
-    z: 0
+    z: 0,
   },
   hemiLight: {
     enabled: true,
@@ -119,6 +135,6 @@ export default {
     intensity: 0.55,
     x: 0,
     y: 0,
-    z: 0
-  }
+    z: 0,
+  },
 };

@@ -1,10 +1,10 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
-import Material from '../components/material';
-import Helpers from '../../utils/helpers';
-import { BufferGeometryUtils } from '../../utils/bufferGeometryUtils';
-import { GLTFLoader } from '../loaders/GLTFLoader';
-import Config from '../../data/config';
+import Material from "../components/material";
+import Helpers from "../../utils/helpers";
+import { BufferGeometryUtils } from "../../utils/bufferGeometryUtils";
+import { GLTFLoader } from "../loaders/GLTFLoader";
+import Config from "../../data/config";
 
 // Loads in a single object from the config file
 export default class Model {
@@ -17,41 +17,33 @@ export default class Model {
     this.ref = null;
   }
 
-  load(type) {
+  load(type, modelIndex = null) {
     // Manager is passed in to loader to determine when loading done in main
 
+    const model = Config.models[modelIndex || Config.model.selected];
     switch (type) {
-      case 'gltf':
+      case "gltf":
         // Load model with selected loader
         new GLTFLoader(this.manager).load(
-          Config.models[Config.model.selected].path,
+          model.path,
           (gltf) => {
             const scene = gltf.scene;
-            let mesh;
 
-            if (Config.shadow.enabled) {
-              scene.traverse(function(node) {
-                if (node.isMesh || node.isLight) node.castShadow = true;
-                if (node.isMesh) {
-                  node.material.wireframe = Config.mesh.wireframe;
-                  mesh = node;
-                }
-              });
+            scene.scale.multiplyScalar(model.scale);
+
+            if (model.position) {
+              scene.position.x = model.position.x;
+              scene.position.y = model.position.y;
+              scene.position.z = model.position.z;
+            }
+            if (model.rotation) {
+              scene.rotation.x = model.rotation.x;
+              scene.rotation.y = model.rotation.y;
+              scene.rotation.z = model.rotation.z;
             }
 
-            this.obj = mesh;
-
-            BufferGeometryUtils.computeTangents(mesh.geometry);
-
-            var group = new THREE.Group();
-            group.scale.multiplyScalar(0.25);
-            this.scene.add( group );
-
-            this.ref = group;
-
-            // To make sure that the matrixWorld is up to date for the boxhelpers
-            group.updateMatrixWorld(true);
-            group.add(mesh);
+            this.obj = scene;
+            this.ref = scene;
 
             // Add to scene
             this.scene.add(scene);
@@ -61,20 +53,20 @@ export default class Model {
         );
         break;
 
-      case 'object':
+      case "object":
         // Load model with ObjectLoader
         new THREE.ObjectLoader(this.manager).load(
-          Config.models[Config.model.selected].path,
-          obj => {
-            obj.traverse(child => {
-              if(child instanceof THREE.Mesh) {
+          model.path,
+          (obj) => {
+            obj.traverse((child) => {
+              if (child instanceof THREE.Mesh) {
                 // Create material for mesh and set its map to texture by name from preloaded textures
                 const material = new Material(0xffffff).standard;
                 material.map = this.textures.UV;
                 child.material = material;
 
                 // Set to cast and receive shadow if enabled
-                if(Config.shadow.enabled) {
+                if (Config.shadow.enabled) {
                   child.receiveShadow = true;
                   child.castShadow = true;
                 }
@@ -85,7 +77,14 @@ export default class Model {
             this.obj = obj;
             this.ref = obj;
 
-            obj.scale.multiplyScalar(Config.models[Config.model.selected].scale);
+            obj.scale.multiplyScalar(model.scale);
+            if (model.position) {
+              obj.position = model.position;
+            }
+            if (model.rotation) {
+              obj.rotation = model.rotation;
+            }
+
             this.scene.add(obj);
           },
           Helpers.logProgress(),
