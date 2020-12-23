@@ -124,12 +124,16 @@ module.exports = function (THREE) {
         scope.panUp((2 * deltaY * targetDistance) / screenHeight);
       } else if (scope.object instanceof THREE.OrthographicCamera) {
         // orthographic
-        scope.panLeft((deltaX * (scope.object.right - scope.object.left)) / screenWidth);
-        scope.panUp((deltaY * (scope.object.top - scope.object.bottom)) / screenHeight);
+        scope.panLeft(
+          (deltaX * (scope.object.right - scope.object.left)) / screenWidth
+        );
+        scope.panUp(
+          (deltaY * (scope.object.top - scope.object.bottom)) / screenHeight
+        );
       } else {
         // camera neither orthographic or perspective
         console.warn(
-          'WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.'
+          "WARNING: OrbitControls.js encountered an unknown camera type - pan disabled."
         );
       }
     };
@@ -146,7 +150,7 @@ module.exports = function (THREE) {
         zoomChanged = true;
       } else {
         console.warn(
-          'WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.'
+          "WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."
         );
       }
     };
@@ -163,7 +167,7 @@ module.exports = function (THREE) {
         zoomChanged = true;
       } else {
         console.warn(
-          'WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.'
+          "WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."
         );
       }
     };
@@ -172,7 +176,10 @@ module.exports = function (THREE) {
       var offset = new THREE.Vector3();
 
       // so camera.up is the orbit axis
-      var quat = new THREE.Quaternion().setFromUnitVectors(object.up, new THREE.Vector3(0, 1, 0));
+      var quat = new THREE.Quaternion().setFromUnitVectors(
+        object.up,
+        new THREE.Vector3(0, 1, 0)
+      );
       var quatInverse = quat.clone().inverse();
 
       var lastPosition = new THREE.Vector3();
@@ -192,13 +199,19 @@ module.exports = function (THREE) {
 
         // angle from y-axis
 
-        phi = Math.atan2(Math.sqrt(offset.x * offset.x + offset.z * offset.z), offset.y);
+        phi = Math.atan2(
+          Math.sqrt(offset.x * offset.x + offset.z * offset.z),
+          offset.y
+        );
 
         theta += thetaDelta;
         phi += phiDelta;
 
         // restrict theta to be between desired limits
-        theta = Math.max(this.minAzimuthAngle, Math.min(this.maxAzimuthAngle, theta));
+        theta = Math.max(
+          this.minAzimuthAngle,
+          Math.min(this.maxAzimuthAngle, theta)
+        );
 
         // restrict phi to be between desired limits
         phi = Math.max(this.minPolarAngle, Math.min(this.maxPolarAngle, phi));
@@ -272,7 +285,7 @@ module.exports = function (THREE) {
 
     // API
 
-    Object.defineProperty(this, 'constraint', {
+    Object.defineProperty(this, "constraint", {
       get: function () {
         return constraint;
       },
@@ -361,14 +374,17 @@ module.exports = function (THREE) {
 
     // events
 
-    var changeEvent = { type: 'change' };
-    var startEvent = { type: 'start' };
-    var endEvent = { type: 'end' };
+    var changeEvent = { type: "change" };
+    var startEvent = { type: "start" };
+    var endEvent = { type: "end" };
 
     // pass in x,y of change desired in pixel space,
     // right and down are positive
     function pan(deltaX, deltaY) {
-      var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+      var element =
+        scope.domElement === document
+          ? scope.domElement.body
+          : scope.domElement;
 
       constraint.pan(deltaX, deltaY, element.clientWidth, element.clientHeight);
     }
@@ -430,8 +446,8 @@ module.exports = function (THREE) {
       }
 
       if (state !== STATE.NONE) {
-        document.addEventListener('mousemove', onMouseMove, false);
-        document.addEventListener('mouseup', onMouseUp, false);
+        document.addEventListener("mousemove", onMouseMove, false);
+        document.addEventListener("mouseup", onMouseUp, false);
         scope.dispatchEvent(startEvent);
       }
     }
@@ -441,7 +457,10 @@ module.exports = function (THREE) {
 
       event.preventDefault();
 
-      var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+      var element =
+        scope.domElement === document
+          ? scope.domElement.body
+          : scope.domElement;
 
       if (state === STATE.ROTATE) {
         if (scope.enableRotate === false) return;
@@ -451,12 +470,14 @@ module.exports = function (THREE) {
 
         // rotating across whole screen goes 360 degrees around
         constraint.rotateLeft(
-          ((2 * Math.PI * rotateDelta.x) / element.clientWidth) * scope.rotateSpeed
+          ((2 * Math.PI * rotateDelta.x) / element.clientWidth) *
+            scope.rotateSpeed
         );
 
         // rotating up and down along whole screen attempts to go 360, but limited to 180
         constraint.rotateUp(
-          ((2 * Math.PI * rotateDelta.y) / element.clientHeight) * scope.rotateSpeed
+          ((2 * Math.PI * rotateDelta.y) / element.clientHeight) *
+            scope.rotateSpeed
         );
 
         rotateStart.copy(rotateEnd);
@@ -490,14 +511,19 @@ module.exports = function (THREE) {
     function onMouseUp(/* event */) {
       if (scope.enabled === false) return;
 
-      document.removeEventListener('mousemove', onMouseMove, false);
-      document.removeEventListener('mouseup', onMouseUp, false);
+      document.removeEventListener("mousemove", onMouseMove, false);
+      document.removeEventListener("mouseup", onMouseUp, false);
       scope.dispatchEvent(endEvent);
       state = STATE.NONE;
     }
 
     function onMouseWheel(event) {
-      if (scope.enabled === false || scope.enableZoom === false || state !== STATE.NONE) return;
+      if (
+        scope.enabled === false ||
+        scope.enableZoom === false ||
+        state !== STATE.NONE
+      )
+        return;
 
       event.preventDefault();
       event.stopPropagation();
@@ -526,7 +552,11 @@ module.exports = function (THREE) {
     }
 
     function onKeyDown(event) {
-      if (scope.enabled === false || scope.enableKeys === false || scope.enablePan === false)
+      if (
+        scope.enabled === false ||
+        scope.enableKeys === false ||
+        scope.enablePan === false
+      )
         return;
 
       switch (event.keyCode) {
@@ -596,7 +626,10 @@ module.exports = function (THREE) {
       event.preventDefault();
       event.stopPropagation();
 
-      var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+      var element =
+        scope.domElement === document
+          ? scope.domElement.body
+          : scope.domElement;
 
       switch (event.touches.length) {
         case 1: // one-fingered touch: rotate
@@ -608,11 +641,13 @@ module.exports = function (THREE) {
 
           // rotating across whole screen goes 360 degrees around
           constraint.rotateLeft(
-            ((2 * Math.PI * rotateDelta.x) / element.clientWidth) * scope.rotateSpeed
+            ((2 * Math.PI * rotateDelta.x) / element.clientWidth) *
+              scope.rotateSpeed
           );
           // rotating up and down along whole screen attempts to go 360, but limited to 180
           constraint.rotateUp(
-            ((2 * Math.PI * rotateDelta.y) / element.clientHeight) * scope.rotateSpeed
+            ((2 * Math.PI * rotateDelta.y) / element.clientHeight) *
+              scope.rotateSpeed
           );
 
           rotateStart.copy(rotateEnd);
@@ -673,32 +708,40 @@ module.exports = function (THREE) {
     }
 
     this.dispose = function () {
-      this.domElement.removeEventListener('contextmenu', contextmenu, false);
-      this.domElement.removeEventListener('mousedown', onMouseDown, false);
-      this.domElement.removeEventListener('mousewheel', onMouseWheel, false);
-      this.domElement.removeEventListener('MozMousePixelScroll', onMouseWheel, false); // firefox
+      this.domElement.removeEventListener("contextmenu", contextmenu, false);
+      this.domElement.removeEventListener("mousedown", onMouseDown, false);
+      this.domElement.removeEventListener("mousewheel", onMouseWheel, false);
+      this.domElement.removeEventListener(
+        "MozMousePixelScroll",
+        onMouseWheel,
+        false
+      ); // firefox
 
-      this.domElement.removeEventListener('touchstart', touchstart, false);
-      this.domElement.removeEventListener('touchend', touchend, false);
-      this.domElement.removeEventListener('touchmove', touchmove, false);
+      this.domElement.removeEventListener("touchstart", touchstart, false);
+      this.domElement.removeEventListener("touchend", touchend, false);
+      this.domElement.removeEventListener("touchmove", touchmove, false);
 
-      document.removeEventListener('mousemove', onMouseMove, false);
-      document.removeEventListener('mouseup', onMouseUp, false);
+      document.removeEventListener("mousemove", onMouseMove, false);
+      document.removeEventListener("mouseup", onMouseUp, false);
 
-      window.removeEventListener('keydown', onKeyDown, false);
+      window.removeEventListener("keydown", onKeyDown, false);
     };
 
-    this.domElement.addEventListener('contextmenu', contextmenu, false);
+    this.domElement.addEventListener("contextmenu", contextmenu, false);
 
-    this.domElement.addEventListener('mousedown', onMouseDown, false);
-    this.domElement.addEventListener('mousewheel', onMouseWheel, false);
-    this.domElement.addEventListener('MozMousePixelScroll', onMouseWheel, false); // firefox
+    this.domElement.addEventListener("mousedown", onMouseDown, false);
+    this.domElement.addEventListener("mousewheel", onMouseWheel, false);
+    this.domElement.addEventListener(
+      "MozMousePixelScroll",
+      onMouseWheel,
+      false
+    ); // firefox
 
-    this.domElement.addEventListener('touchstart', touchstart, false);
-    this.domElement.addEventListener('touchend', touchend, false);
-    this.domElement.addEventListener('touchmove', touchmove, false);
+    this.domElement.addEventListener("touchstart", touchstart, false);
+    this.domElement.addEventListener("touchend", touchend, false);
+    this.domElement.addEventListener("touchmove", touchmove, false);
 
-    window.addEventListener('keydown', onKeyDown, false);
+    window.addEventListener("keydown", onKeyDown, false);
 
     // force an update at start
     this.update();
@@ -720,7 +763,9 @@ module.exports = function (THREE) {
       },
 
       set: function (value) {
-        console.warn('THREE.OrbitControls: target is now immutable. Use target.set() instead.');
+        console.warn(
+          "THREE.OrbitControls: target is now immutable. Use target.set() instead."
+        );
         this.constraint.target.copy(value);
       },
     },
@@ -829,12 +874,16 @@ module.exports = function (THREE) {
 
     noZoom: {
       get: function () {
-        console.warn('THREE.OrbitControls: .noZoom has been deprecated. Use .enableZoom instead.');
+        console.warn(
+          "THREE.OrbitControls: .noZoom has been deprecated. Use .enableZoom instead."
+        );
         return !this.enableZoom;
       },
 
       set: function (value) {
-        console.warn('THREE.OrbitControls: .noZoom has been deprecated. Use .enableZoom instead.');
+        console.warn(
+          "THREE.OrbitControls: .noZoom has been deprecated. Use .enableZoom instead."
+        );
         this.enableZoom = !value;
       },
     },
@@ -842,14 +891,14 @@ module.exports = function (THREE) {
     noRotate: {
       get: function () {
         console.warn(
-          'THREE.OrbitControls: .noRotate has been deprecated. Use .enableRotate instead.'
+          "THREE.OrbitControls: .noRotate has been deprecated. Use .enableRotate instead."
         );
         return !this.enableRotate;
       },
 
       set: function (value) {
         console.warn(
-          'THREE.OrbitControls: .noRotate has been deprecated. Use .enableRotate instead.'
+          "THREE.OrbitControls: .noRotate has been deprecated. Use .enableRotate instead."
         );
         this.enableRotate = !value;
       },
@@ -857,24 +906,32 @@ module.exports = function (THREE) {
 
     noPan: {
       get: function () {
-        console.warn('THREE.OrbitControls: .noPan has been deprecated. Use .enablePan instead.');
+        console.warn(
+          "THREE.OrbitControls: .noPan has been deprecated. Use .enablePan instead."
+        );
         return !this.enablePan;
       },
 
       set: function (value) {
-        console.warn('THREE.OrbitControls: .noPan has been deprecated. Use .enablePan instead.');
+        console.warn(
+          "THREE.OrbitControls: .noPan has been deprecated. Use .enablePan instead."
+        );
         this.enablePan = !value;
       },
     },
 
     noKeys: {
       get: function () {
-        console.warn('THREE.OrbitControls: .noKeys has been deprecated. Use .enableKeys instead.');
+        console.warn(
+          "THREE.OrbitControls: .noKeys has been deprecated. Use .enableKeys instead."
+        );
         return !this.enableKeys;
       },
 
       set: function (value) {
-        console.warn('THREE.OrbitControls: .noKeys has been deprecated. Use .enableKeys instead.');
+        console.warn(
+          "THREE.OrbitControls: .noKeys has been deprecated. Use .enableKeys instead."
+        );
         this.enableKeys = !value;
       },
     },
@@ -882,14 +939,14 @@ module.exports = function (THREE) {
     staticMoving: {
       get: function () {
         console.warn(
-          'THREE.OrbitControls: .staticMoving has been deprecated. Use .enableDamping instead.'
+          "THREE.OrbitControls: .staticMoving has been deprecated. Use .enableDamping instead."
         );
         return !this.constraint.enableDamping;
       },
 
       set: function (value) {
         console.warn(
-          'THREE.OrbitControls: .staticMoving has been deprecated. Use .enableDamping instead.'
+          "THREE.OrbitControls: .staticMoving has been deprecated. Use .enableDamping instead."
         );
         this.constraint.enableDamping = !value;
       },
@@ -898,14 +955,14 @@ module.exports = function (THREE) {
     dynamicDampingFactor: {
       get: function () {
         console.warn(
-          'THREE.OrbitControls: .dynamicDampingFactor has been renamed. Use .dampingFactor instead.'
+          "THREE.OrbitControls: .dynamicDampingFactor has been renamed. Use .dampingFactor instead."
         );
         return this.constraint.dampingFactor;
       },
 
       set: function (value) {
         console.warn(
-          'THREE.OrbitControls: .dynamicDampingFactor has been renamed. Use .dampingFactor instead.'
+          "THREE.OrbitControls: .dynamicDampingFactor has been renamed. Use .dampingFactor instead."
         );
         this.constraint.dampingFactor = value;
       },

@@ -34,7 +34,7 @@ export default {
       scale: 0.1,
       type: "gltf",
       position: {
-        x: -4,
+        x: -15,
         y: 2,
         z: 28,
       },
@@ -51,6 +51,21 @@ export default {
       position: {
         x: 15,
         y: 2,
+        z: 20,
+      },
+      rotation: {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+    },
+    {
+      path: "./assets/models/book/scene.gltf",
+      scale: 0.015,
+      type: "gltf",
+      position: {
+        x: 33,
+        y: 10,
         z: 20,
       },
       rotation: {

@@ -33,7 +33,7 @@ export default class Geometry {
       };
     }
 
-    if (type === "tetrahedon") {
+    if (type === "tetrahedron") {
       return (radius = 5, detail = null) => {
         this.geo = new THREE.TetrahedronBufferGeometry(radius, detail);
       };
@@ -66,21 +66,44 @@ export default class Geometry {
         this.geo = new THREE.IcosahedronBufferGeometry(radius, detail);
       };
     }
+
+    if (type === "text") {
+      return (
+        text = null,
+        font = null,
+        size = 40,
+        height = 5,
+        curveSegments = 12
+      ) => {
+        this.geo = new THREE.TextGeometry(text, {
+          font: font,
+          size: size,
+          height: height,
+          curveSegments: curveSegments,
+        });
+      };
+    }
   }
 
-  place(position, rotation, meshColor = 0xeeeeee) {
+  place(position = null, rotation = null, meshColor = 0xeeeeee) {
     const material = new Material(meshColor).standard;
     this.mesh = new THREE.Mesh(this.geo, material);
 
     // Use ES6 spread to set position and rotation from passed in array
-    this.mesh.position.set(...position);
-    this.mesh.rotation.set(...rotation);
+    if (position) {
+      this.mesh.position.set(...position);
+    }
+    if (rotation) {
+      this.mesh.rotation.set(...rotation);
+    }
 
     if (Config.shadow.enabled) {
       this.mesh.receiveShadow = true;
     }
 
     this.scene.add(this.mesh);
+
+    return this.mesh;
   }
 
   rotate(rotation) {

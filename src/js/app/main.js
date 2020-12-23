@@ -21,8 +21,8 @@ import Texture from "./model/texture";
 import Model from "./model/model";
 
 // Managers
-import Interaction from "./managers/interaction";
 import DatGUI from "./managers/datGUI";
+import { Interaction } from "three.interaction";
 
 // data
 import Config from "../data/config";
@@ -61,7 +61,10 @@ export default class Main {
     this.loadPlatonics();
     // Components instantiations
     this.camera = new Camera(this.renderer.threeRenderer);
-    this.controls = new Controls(this.camera.threeCamera, container);
+    this.controls = new Controls(
+      this.camera.threeCamera,
+      this.renderer.threeRenderer.domElement
+    );
     this.light = new Light(this.scene);
 
     this.light.place("ambient");
@@ -88,9 +91,35 @@ export default class Main {
     this.texture.load().then(() => {
       this.manager = new THREE.LoadingManager();
 
-      // Textures loaded, load model
+      // Textures loaded, load contact text and model
+
+      const loader = new THREE.FontLoader();
+
+      loader.load("/assets/fonts/helvetiker_regular.typeface.json", (font) => {
+        this.contactMeText = new Geometry(this.scene);
+        this.contactMeText.make("text")("Contact Me", font, 2, 0.3, 12);
+
+        this.contactMeText.place([-21, 16, 30], [0, 0.1, 0], "black");
+        this.contactMeText.mesh.cursor = "pointer";
+        this.contactMeText.mesh.on("click", (ev) => {
+          $("#contactModal").modal().show();
+        });
+
+        this.resumeText = new Geometry(this.scene);
+        this.resumeText.make("text")(" My Resume", font, 2, 0.3, 12);
+
+        this.resumeText.place([24.3, 17, 24], [0, -0.1, 0], "black");
+        this.resumeText.mesh.cursor = "pointer";
+        this.resumeText.mesh.on("click", function (ev) {
+          $("#resumeModal").modal().show();
+        });
+      });
+
       this.postboxModel = new Model(this.scene, this.manager);
       this.postboxModel.load(Config.models[Config.model.selected].type, 2);
+
+      this.resumeModel = new Model(this.scene, this.manager);
+      this.resumeModel.load(Config.models[Config.model.selected].type, 4);
 
       // Textures loaded, load model
       this.mjModel = new Model(this.scene, this.manager);
@@ -103,24 +132,17 @@ export default class Main {
 
       // All loaders done now
       this.manager.onLoad = () => {
-        console.log(this.mjModel.animations[0]);
         this.mjModelAnimation = new Animation(
           this.mjModel.obj,
           this.mjModel.animations[0]
         );
 
-        this.light.ambientLight.position.set(
-          this.mjModel.obj.position.x,
-          this.mjModel.obj.position.y,
-          this.mjModel.obj.position.z + 50
-        );
+        this.light.ambientLight.position.set(15, 2, 70);
 
-        // Set up interaction manager with the app now that the model is finished loading
-        new Interaction(
+        const interaction = new Interaction(
           this.renderer.threeRenderer,
           this.scene,
-          this.camera.threeCamera,
-          this.controls.threeControls
+          this.camera.threeCamera
         );
 
         // Add dat.GUI controls if dev
@@ -244,9 +266,9 @@ export default class Main {
   loadPlatonics() {
     const time = performance.now() * 0.001;
 
-    this.tetrathedon = new Geometry(this.scene);
-    this.tetrathedon.make("tetrahedon")(5);
-    this.tetrathedon.place(
+    this.tetrahedron = new Geometry(this.scene);
+    this.tetrahedron.make("tetrahedron")(5);
+    this.tetrahedron.place(
       [-60, 20, -20],
       [time * 0.5, null, time * 0.51],
       "red"
@@ -284,11 +306,15 @@ export default class Main {
   spinPlatonics() {
     const time = performance.now() * 0.001;
 
-    this.tetrathedon.rotate([time * 0.5, null, time * 0.51]);
+    this.tetrahedron.rotate([time * 0.5, null, time * 0.51]);
     this.box.rotate([time * 0.5, null, time * 0.51]);
     this.octahedron.rotate([time * 0.5, null, time * 0.51]);
     this.dodecahedron.rotate([-time * 0.5, null, time * 0.51]);
     this.icosahedron.rotate([-time * 0.5, null, time * 0.51]);
+
+    if (this.resumeModel && this.resumeModel.obj) {
+      this.resumeModel.obj.rotation.y = -time * 0.2;
+    }
   }
 
   onWindowResize() {
