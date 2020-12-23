@@ -31,7 +31,7 @@ export default {
     },
     {
       path: "./assets/models/mailbox/scene.gltf",
-      scale: 0.04,
+      scale: 0.1,
       type: "gltf",
       position: {
         x: -4,
@@ -41,6 +41,21 @@ export default {
       rotation: {
         x: 0,
         y: -Math.PI,
+        z: 0,
+      },
+    },
+    {
+      path: "./assets/models/mjmodel/untitled.gltf",
+      scale: 20,
+      type: "gltf",
+      position: {
+        x: 15,
+        y: 2,
+        z: 20,
+      },
+      rotation: {
+        x: 0,
+        y: 0,
         z: 0,
       },
     },
@@ -96,7 +111,7 @@ export default {
   },
   ambientLight: {
     enabled: true,
-    color: 0x141414,
+    color: 0xf0f0f0,
   },
   directionalLight: {
     enabled: true,

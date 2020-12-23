@@ -1,38 +1,38 @@
 // Global imports
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
+const webpack = require("webpack");
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 // Paths
-const entry = './src/js/app.js';
-const includePath = path.join(__dirname, 'src/js');
-const nodeModulesPath = path.join(__dirname, 'node_modules');
+const entry = "./src/js/app.js";
+const includePath = path.join(__dirname, "src/js");
+const nodeModulesPath = path.join(__dirname, "node_modules");
 
-let outputPath = path.join(__dirname, 'src/public/js');
+let outputPath = path.join(__dirname, "src/public/js");
 
-module.exports = env => {
+module.exports = (env) => {
   // Dev environment
-  let devtool = 'eval';
-  let mode = 'development';
-  let stats = 'minimal';
+  let devtool = "eval";
+  let mode = "development";
+  let stats = "minimal";
   let plugins = [
     new webpack.DefinePlugin({
-      __ENV__: JSON.stringify(env.NODE_ENV)
-    })
+      __ENV__: JSON.stringify(env.NODE_ENV),
+    }),
   ];
 
   // Prod environment
-  if (env.NODE_ENV === 'prod') {
-    devtool = 'hidden-source-map';
-    mode = 'production';
-    stats = 'none';
+  if (env.NODE_ENV === "prod") {
+    devtool = "hidden-source-map";
+    mode = "production";
+    stats = "none";
     outputPath = `${__dirname}/build/js`;
   }
 
-  console.log('Webpack build -');
+  console.log("Webpack build -");
   console.log(`    - ENV: ${env.NODE_ENV}`);
   console.log(`    - outputPath  ${outputPath}`);
   console.log(`    - includePath ${includePath}`);
@@ -41,9 +41,7 @@ module.exports = env => {
   return {
     // Here the application starts executing
     // and webpack starts bundling
-    entry: [
-      entry
-    ],
+    entry: [entry],
 
     // options related to how webpack emits results
     output: {
@@ -51,9 +49,9 @@ module.exports = env => {
       // must be an absolute path (use the Node.js path module)
       path: outputPath,
       // the url to the output directory resolved relative to the HTML page
-      publicPath: 'js',
+      publicPath: "js",
       // the filename template for entry chunks
-      filename: 'app.js'
+      filename: "app.js",
     },
 
     // Webpack 4 mode helper
@@ -76,7 +74,7 @@ module.exports = env => {
           // -loader suffix is no longer optional in webpack2 for clarity reasons
           // see webpack 1 upgrade guide
           use: {
-            loader: 'babel-loader',
+            loader: "babel-loader",
           },
           include: includePath,
           exclude: nodeModulesPath,
@@ -89,32 +87,29 @@ module.exports = env => {
               options: {
                 // you can specify a publicPath here
                 // by default it use publicPath in webpackOptions.output
-                publicPath: 'css'
-              }
+                publicPath: "css",
+              },
             },
-            'css-loader',
-            'postcss-loader',
-            'sass-loader',
+            "css-loader",
+            "postcss-loader",
+            "sass-loader",
           ],
-        }
-      ]
+        },
+      ],
     },
 
     // options for resolving module requests
     // (does not apply to resolving to loaders)
     resolve: {
       // directories where to look for modules,
-      modules: [
-        'node_modules',
-        path.resolve(__dirname, 'src')
-      ],
+      modules: ["node_modules", path.resolve(__dirname, "src")],
 
       // extensions that are used
-      extensions: ['.js', '.json'],
+      extensions: [".js", ".json"],
     },
 
     performance: {
-      hints: 'warning'
+      hints: "warning",
     },
 
     // lets you precisely control what bundle information gets displayed
@@ -125,19 +120,19 @@ module.exports = env => {
     devtool,
 
     devServer: {
-      contentBase: 'src/public'
+      contentBase: "src/public",
     },
 
     plugins: plugins.concat(
       new HtmlWebpackPlugin({
-        title: 'Three.js Webpack ES6 Boilerplate',
-        template: path.join(__dirname, 'src/html/index.html'),
-        filename: '../index.html',
+        title: "Muhammeds Space",
+        template: path.join(__dirname, "src/html/index.html"),
+        filename: "../index.html",
         env: env.NODE_ENV,
       }),
       new MiniCssExtractPlugin({
-        filename: '../css/[name].css',
-        chunkFilename: '../css/[id].css'
+        filename: "../css/[name].css",
+        chunkFilename: "../css/[id].css",
       })
     ),
 
@@ -146,26 +141,26 @@ module.exports = env => {
         new TerserPlugin({
           cache: true,
           parallel: true,
-          sourceMap: true // set to true if you want JS source maps
+          sourceMap: true, // set to true if you want JS source maps
         }),
-        new OptimizeCSSAssetsPlugin({})
+        new OptimizeCSSAssetsPlugin({}),
       ],
-      runtimeChunk: 'single',
+      runtimeChunk: "single",
       splitChunks: {
         cacheGroups: {
           vendor: {
             test: /[\\\/]node_modules[\\\/]/,
-            name: 'vendors',
-            chunks: 'all'
+            name: "vendors",
+            chunks: "all",
           },
           styles: {
-            name: 'styles',
+            name: "styles",
             test: /\.css$/,
-            chunks: 'all',
-            enforce: true
-          }
-        }
-      }
-    }
+            chunks: "all",
+            enforce: true,
+          },
+        },
+      },
+    },
   };
 };

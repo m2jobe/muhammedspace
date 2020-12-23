@@ -26,6 +26,7 @@ import DatGUI from "./managers/datGUI";
 
 // data
 import Config from "../data/config";
+import Animation from "./components/animation";
 // -- End of imports
 
 // This class instantiates and ties all of the components together, starts the loading process and renders the main loop
@@ -57,15 +58,13 @@ export default class Main {
 
     this.prepareEnvironment();
 
+    this.loadPlatonics();
     // Components instantiations
     this.camera = new Camera(this.renderer.threeRenderer);
     this.controls = new Controls(this.camera.threeCamera, container);
     this.light = new Light(this.scene);
 
-    // Create and place lights in scene
-    const lights = ["ambient", "directional", "point", "hemi"];
-    //lights.forEach((light) => this.light.place(light));
-
+    this.light.place("ambient");
     // Create and place geo in scene
     /*this.geometry = new Geometry(this.scene);
     this.geometry.make("plane")(150, 150, 10, 10);
@@ -93,6 +92,10 @@ export default class Main {
       this.postboxModel = new Model(this.scene, this.manager);
       this.postboxModel.load(Config.models[Config.model.selected].type, 2);
 
+      // Textures loaded, load model
+      this.mjModel = new Model(this.scene, this.manager);
+      this.mjModel.load(Config.models[Config.model.selected].type, 3);
+
       // onProgress callback
       this.manager.onProgress = (item, loaded, total) => {
         console.log(`${item}: ${loaded} ${total}`);
@@ -100,6 +103,18 @@ export default class Main {
 
       // All loaders done now
       this.manager.onLoad = () => {
+        console.log(this.mjModel.animations[0]);
+        this.mjModelAnimation = new Animation(
+          this.mjModel.obj,
+          this.mjModel.animations[0]
+        );
+
+        this.light.ambientLight.position.set(
+          this.mjModel.obj.position.x,
+          this.mjModel.obj.position.y,
+          this.mjModel.obj.position.z + 50
+        );
+
         // Set up interaction manager with the app now that the model is finished loading
         new Interaction(
           this.renderer.threeRenderer,
@@ -156,6 +171,13 @@ export default class Main {
     this.renderer.threeRenderer.toneMappingExposure = 0.06;
 
     this.renderer.threeRenderer.render(this.scene, this.camera.threeCamera);
+
+    this.spinPlatonics();
+
+    if (this.mjModelAnimation) {
+      const delta = this.clock.getDelta();
+      this.mjModelAnimation.update(delta);
+    }
 
     requestAnimationFrame(this.render.bind(this)); // Bind the main class instead of window object
   }
@@ -217,6 +239,56 @@ export default class Main {
       .normalize();
 
     this.scene.environment = this.pmremGenerator.fromScene(this.sky).texture;
+  }
+
+  loadPlatonics() {
+    const time = performance.now() * 0.001;
+
+    this.tetrathedon = new Geometry(this.scene);
+    this.tetrathedon.make("tetrahedon")(5);
+    this.tetrathedon.place(
+      [-60, 20, -20],
+      [time * 0.5, null, time * 0.51],
+      "red"
+    );
+
+    this.box = new Geometry(this.scene);
+    this.box.make("box")();
+    this.box.place([-30, 20, -30], [time * 0.5, null, time * 0.51], "green");
+
+    this.octahedron = new Geometry(this.scene);
+    this.octahedron.make("octahedron")();
+    this.octahedron.place(
+      [0, 20, -40],
+      [time * 0.5, null, time * 0.51],
+      "yellow"
+    );
+
+    this.dodecahedron = new Geometry(this.scene);
+    this.dodecahedron.make("dodecahedron")();
+    this.dodecahedron.place(
+      [30, 20, -30],
+      [-time * 0.5, null, time * 0.51],
+      "blue"
+    );
+
+    this.icosahedron = new Geometry(this.scene);
+    this.icosahedron.make("icosahedron")();
+    this.icosahedron.place(
+      [60, 20, -20],
+      [-time * 0.5, null, time * 0.51],
+      "black"
+    );
+  }
+
+  spinPlatonics() {
+    const time = performance.now() * 0.001;
+
+    this.tetrathedon.rotate([time * 0.5, null, time * 0.51]);
+    this.box.rotate([time * 0.5, null, time * 0.51]);
+    this.octahedron.rotate([time * 0.5, null, time * 0.51]);
+    this.dodecahedron.rotate([-time * 0.5, null, time * 0.51]);
+    this.icosahedron.rotate([-time * 0.5, null, time * 0.51]);
   }
 
   onWindowResize() {
