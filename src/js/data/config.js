@@ -110,7 +110,7 @@ export default {
     rotateSpeed: 0.5,
     zoomSpeed: 1,
     minDistance: 60,
-    maxDistance: 200,
+    maxDistance: 300,
     minPolarAngle: Math.PI / 5,
     maxPolarAngle: Math.PI * 0.495,
     minAzimuthAngle: -Infinity,

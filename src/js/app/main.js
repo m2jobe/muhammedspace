@@ -162,7 +162,7 @@ export default class Main {
     this.updateSun();
 
     document.addEventListener(
-      "mousemove",
+      "mousedown",
       function (e) {
         this.onDocumentTouchEnd(e);
       }.bind(this),
@@ -284,7 +284,8 @@ export default class Main {
     this.tetrahedron.place(
       [-60, 20, -20],
       [time * 0.5, null, time * 0.51],
-      "#A0150D"
+      "#A0150D",
+      "tetrahedon"
     );
 
     this.box = new Geometry(this.scene);
@@ -365,6 +366,9 @@ export default class Main {
     intersects.forEach((i) => {
       console.log(i);
       if (i.object.name == "Contact Me") {
+        $("#contactModal").modal().show();
+      }
+      if (i.object.name == "tetrahedon") {
         $("#contactModal").modal().show();
       }
     });
