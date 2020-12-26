@@ -205,7 +205,7 @@ export default class Main {
 
     this.water.material.uniforms["time"].value += 1.0 / 60.0;
     if (this.water.material.uniforms["size"].value < 100) {
-      this.water.material.uniforms["size"].value += 2;
+      this.water.material.uniforms["size"].value += 0.5;
     }
     this.renderer.threeRenderer.toneMappingExposure = 0.06;
 
