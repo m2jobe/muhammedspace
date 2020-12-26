@@ -159,7 +159,7 @@ export default class Main {
 
     // Start render which does not wait for model fully loaded
     this.render();
-    this.updateSun();
+    //this.updateSun();
 
     document.addEventListener(
       "mousedown",
@@ -199,10 +199,10 @@ export default class Main {
     TWEEN.update();
     this.controls.threeControls.update();
 
-    this.water.material.uniforms["time"].value += 1.0 / 60.0;
+    /*this.water.material.uniforms["time"].value += 1.0 / 60.0;
     if (this.water.material.uniforms["size"].value < 100) {
       this.water.material.uniforms["size"].value += 0.5;
-    }
+    }*/
     this.renderer.threeRenderer.toneMappingExposure = 0.06;
 
     this.renderer.threeRenderer.render(this.scene, this.camera.threeCamera);
@@ -240,7 +240,7 @@ export default class Main {
 
     this.water.rotation.x = -Math.PI / 2;
 
-    this.scene.add(this.water);
+    //this.scene.add(this.water);
 
     // Skybox
 
@@ -252,7 +252,7 @@ export default class Main {
     this.sky.material.uniforms["mieCoefficient"].value = 0.005;
     this.sky.material.uniforms["mieDirectionalG"].value = 0.5;
 
-    this.scene.add(this.sky);
+    //this.scene.add(this.sky);
   }
 
   updateSun() {
