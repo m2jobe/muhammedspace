@@ -344,6 +344,8 @@ export default class Main {
   }
 
   onDocumentTouchEnd(event) {
+    $("#contactModal").modal().show();
+
     this.mouse.x =
       (event.changedTouches[0].clientX /
         this.renderer.threeRenderer.domElement.clientWidth) *
