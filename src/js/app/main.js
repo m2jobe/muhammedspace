@@ -344,31 +344,31 @@ export default class Main {
   }
 
   onDocumentTouchEnd(event) {
-    $("#contactModal").modal().show();
+    if (event && event.changedTouches && event.changedTouches[0]) {
+      this.mouse.x =
+        (event.changedTouches[0].pageX /
+          this.renderer.threeRenderer.domElement.clientWidth) *
+          2 -
+        1;
+      this.mouse.y =
+        -(
+          event.changedTouches[0].pageY /
+          this.renderer.threeRenderer.domElement.clientHeight
+        ) *
+          2 +
+        1;
 
-    this.mouse.x =
-      (event.changedTouches[0].clientX /
-        this.renderer.threeRenderer.domElement.clientWidth) *
-        2 -
-      1;
-    this.mouse.y =
-      -(
-        event.changedTouches[0].clientY /
-        this.renderer.threeRenderer.domElement.clientHeight
-      ) *
-        2 +
-      1;
+      this.rayCaster.setFromCamera(this.mouse, this.camera.threeCamera);
 
-    this.rayCaster.setFromCamera(this.mouse, this.camera.threeCamera);
+      var intersects = this.rayCaster.intersectObjects(this.scene.children);
 
-    var intersects = this.rayCaster.intersectObjects(this.scene.children);
-
-    console.log(intersects + " intersected objects found");
-    intersects.forEach((i) => {
-      console.log(i);
-      if (i.object.name == "Contact Me") {
-        $("#contactModal").modal().show();
-      }
-    });
+      console.log(intersects + " intersected objects found");
+      intersects.forEach((i) => {
+        console.log(i);
+        if (i.object.name == "Contact Me") {
+          $("#contactModal").modal().show();
+        }
+      });
+    }
   }
 }
