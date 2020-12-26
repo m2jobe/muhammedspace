@@ -22,7 +22,6 @@ import Model from "./model/model";
 
 // Managers
 import DatGUI from "./managers/datGUI";
-import { Interaction } from "three.interaction";
 
 // data
 import Config from "../data/config";
@@ -113,25 +112,11 @@ export default class Main {
         this.resumeText.make("text")(" My Resume", font, 2, 0.3, 12);
 
         this.resumeText.place([24.3, 17, 24], [0, -0.1, 0], "black");
-        this.resumeText.mesh.cursor = "pointer";
-        this.resumeText.mesh.on("touchstart", function (ev) {
-          $("#resumeModal").modal().show();
-        });
-        this.resumeText.mesh.on("click", function (ev) {
-          $("#resumeModal").modal().show();
-        });
 
         this.pastText = new Geometry(this.scene);
         this.pastText.make("text")("Visit Portfolio", font, 1.2, 0.3, 12);
 
         this.pastText.place([3, 1.2, 63], [0, 0.9, 0], "black");
-        this.pastText.mesh.cursor = "pointer";
-        this.pastText.mesh.on("touchstart", function (ev) {
-          window.location.replace("/portfolio");
-        });
-        this.pastText.mesh.on("click", function (ev) {
-          window.location.replace("/portfolio");
-        });
       });
 
       this.postboxModel = new Model(this.scene, this.manager);
@@ -148,12 +133,6 @@ export default class Main {
       this.manager.onProgress = (item, loaded, total) => {
         console.log(`${item}: ${loaded} ${total}`);
       };
-
-      const interaction = new Interaction(
-        this.renderer.threeRenderer,
-        this.scene,
-        this.camera.threeCamera
-      );
 
       // All loaders done now
       this.manager.onLoad = () => {
@@ -183,7 +162,15 @@ export default class Main {
     this.updateSun();
 
     window.addEventListener(
-      "touchend",
+      "mousedown",
+      function (e) {
+        this.onDocumentTouchEnd(e);
+      }.bind(this),
+      false
+    );
+
+    window.addEventListener(
+      "touchstart",
       function (e) {
         this.onDocumentTouchEnd(e);
       }.bind(this),
@@ -343,32 +330,43 @@ export default class Main {
     }
   }
 
-  onDocumentTouchEnd(event) {
-    if (event && event.changedTouches && event.changedTouches[0]) {
-      this.mouse.x =
-        (event.changedTouches[0].pageX /
-          this.renderer.threeRenderer.domElement.clientWidth) *
-          2 -
-        1;
-      this.mouse.y =
-        -(
-          event.changedTouches[0].pageY /
-          this.renderer.threeRenderer.domElement.clientHeight
-        ) *
-          2 +
-        1;
-
-      this.rayCaster.setFromCamera(this.mouse, this.camera.threeCamera);
-
-      var intersects = this.rayCaster.intersectObjects(this.scene.children);
-
-      console.log(intersects + " intersected objects found");
-      intersects.forEach((i) => {
-        console.log(i);
-        if (i.object.name == "Contact Me") {
-          $("#contactModal").modal().show();
-        }
-      });
+  onDocumentTouchEnd(e) {
+    let x, y;
+    if (
+      e.type == "touchstart" ||
+      e.type == "touchmove" ||
+      e.type == "touchend" ||
+      e.type == "touchcancel"
+    ) {
+      var evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
+      var touch = evt.touches[0] || evt.changedTouches[0];
+      x = touch.pageX;
+      y = touch.pageY;
+    } else if (
+      e.type == "mousedown" ||
+      e.type == "mouseup" ||
+      e.type == "mousemove" ||
+      e.type == "mouseover" ||
+      e.type == "mouseout" ||
+      e.type == "mouseenter" ||
+      e.type == "mouseleave"
+    ) {
+      x = e.clientX;
+      y = e.clientY;
     }
+
+    this.mouse.x = (x / window.innerWidth) * 2 - 1;
+    this.mouse.y = -(y / window.innerHeight) * 2 + 1;
+
+    this.rayCaster.setFromCamera(this.mouse, this.camera.threeCamera);
+
+    var intersects = this.rayCaster.intersectObjects(this.scene.children);
+
+    intersects.forEach((i) => {
+      console.log(i);
+      if (i.object.name == "Contact Me") {
+        $("#contactModal").modal().show();
+      }
+    });
   }
 }
