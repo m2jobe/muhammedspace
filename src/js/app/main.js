@@ -53,7 +53,7 @@ export default class Main {
     //the sun
     this.sun = new THREE.Vector3();
 
-    this.raycaster = new THREE.Raycaster();
+    this.rayCaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
     // for the sun
@@ -108,7 +108,6 @@ export default class Main {
           "black",
           "Contact Me"
         );
-        this.contactMeText.mesh.cursor = "pointer";
 
         this.resumeText = new Geometry(this.scene);
         this.resumeText.make("text")(" My Resume", font, 2, 0.3, 12);
@@ -183,7 +182,7 @@ export default class Main {
     this.render();
     this.updateSun();
 
-    document.addEventListener(
+    window.addEventListener(
       "touchend",
       function (e) {
         this.onDocumentTouchEnd(e);
@@ -345,25 +344,29 @@ export default class Main {
   }
 
   onDocumentTouchEnd(event) {
-    // calculate mouse position in normalized device coordinates
-    // (-1 to +1) for both components
-
     this.mouse.x =
-      (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
+      (event.changedTouches[0].clientX /
+        this.renderer.threeRenderer.domElement.clientWidth) *
+        2 -
+      1;
     this.mouse.y =
-      -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
-    // update the picking ray with the camera and mouse position
-    this.raycaster.setFromCamera(this.mouse, this.camera.threeCamera);
+      -(
+        event.changedTouches[0].clientY /
+        this.renderer.threeRenderer.domElement.clientHeight
+      ) *
+        2 +
+      1;
 
-    // calculate objects intersecting the picking ray
-    const intersects = this.raycaster.intersectObjects(this.scene.children);
+    this.rayCaster.setFromCamera(this.mouse, this.camera.threeCamera);
 
-    for (let i = 0; i < intersects.length; i++) {
-      if (intersects[i].object.name == "Contact Me") {
-        alert("Dd");
+    var intersects = this.rayCaster.intersectObjects(this.scene.children);
+
+    console.log(intersects + " intersected objects found");
+    intersects.forEach((i) => {
+      console.log(i);
+      if (i.object.name == "Contact Me") {
+        $("#contactModal").modal().show();
       }
-    }
-
-    console.log(intersects);
+    });
   }
 }
