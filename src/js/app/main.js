@@ -338,7 +338,6 @@ export default class Main {
       e.type == "touchend" ||
       e.type == "touchcancel"
     ) {
-      let r = canvas.getBoundingClientRect();
       var evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
       var touch = evt.touches[0] || evt.changedTouches[0];
       x = touch.clientX;
