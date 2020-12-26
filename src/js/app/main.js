@@ -340,8 +340,8 @@ export default class Main {
     ) {
       var evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
       var touch = evt.touches[0] || evt.changedTouches[0];
-      x = touch.pageX;
-      y = touch.pageY;
+      x = touch.pageX - evt.touches[0].target.offsetLeft;
+      y = touch.pageY - evt.touches[0].target.offsetTop;
     } else if (
       e.type == "mousedown" ||
       e.type == "mouseup" ||
