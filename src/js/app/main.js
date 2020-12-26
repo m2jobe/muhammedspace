@@ -161,15 +161,15 @@ export default class Main {
     this.render();
     this.updateSun();
 
-    window.addEventListener(
-      "mousedown",
+    document.addEventListener(
+      "mousemove",
       function (e) {
         this.onDocumentTouchEnd(e);
       }.bind(this),
       false
     );
 
-    window.addEventListener(
+    document.addEventListener(
       "touchstart",
       function (e) {
         this.onDocumentTouchEnd(e);
@@ -338,10 +338,11 @@ export default class Main {
       e.type == "touchend" ||
       e.type == "touchcancel"
     ) {
+      let r = canvas.getBoundingClientRect();
       var evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
       var touch = evt.touches[0] || evt.changedTouches[0];
-      x = touch.pageX - evt.touches[0].target.offsetLeft;
-      y = touch.pageY - evt.touches[0].target.offsetTop;
+      x = touch.clientX;
+      y = touch.clientY;
     } else if (
       e.type == "mousedown" ||
       e.type == "mouseup" ||
