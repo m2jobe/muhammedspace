@@ -101,18 +101,7 @@ export default class Main {
 
         this.contactMeText.place([-21, 16, 30], [0, 0.1, 0], "black");
         this.contactMeText.mesh.cursor = "pointer";
-        this.contactMeText.mesh.on("click", (ev) => {
-          $("#contactModal").modal().show();
-        });
-        this.contactMeText.mesh.on("mouseout", (ev) => {
-          $("#contactModal").modal().show();
-        });
-
-        this.contactMeText.mesh.on("touchmove", (ev) => {
-          $("#contactModal").modal().show();
-        });
-
-        this.contactMeText.mesh.on("touchend", (ev) => {
+        this.resumeText.mesh.on("touchend", function (ev) {
           $("#contactModal").modal().show();
         });
 
