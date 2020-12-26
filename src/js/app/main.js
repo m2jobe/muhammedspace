@@ -104,15 +104,15 @@ export default class Main {
         this.contactMeText.mesh.on("click", (ev) => {
           $("#contactModal").modal().show();
         });
-        this.contactMeText.mesh.on("touchstart", (ev) => {
+        this.contactMeText.mesh.on("mouseout", (ev) => {
+          $("#contactModal").modal().show();
+        });
+
+        this.contactMeText.mesh.on("touchmove", (ev) => {
           $("#contactModal").modal().show();
         });
 
         this.contactMeText.mesh.on("touchend", (ev) => {
-          $("#contactModal").modal().show();
-        });
-
-        this.contactMeText.mesh.on("mousedown", (ev) => {
           $("#contactModal").modal().show();
         });
 
