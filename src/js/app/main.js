@@ -95,7 +95,7 @@ export default class Main {
 
       const loader = new THREE.FontLoader();
 
-      loader.load("/assets/fonts/helvetiker_regular.typeface.json", (font) => {
+      loader.load("./assets/fonts/helvetiker_regular.typeface.json", (font) => {
         this.contactMeText = new Geometry(this.scene);
         this.contactMeText.make("text")("Contact Me", font, 2, 0.3, 12);
 
@@ -104,14 +104,32 @@ export default class Main {
         this.contactMeText.mesh.on("click", (ev) => {
           $("#contactModal").modal().show();
         });
+        this.contactMeText.mesh.on("touchstart", (ev) => {
+          $("#contactModal").modal().show();
+        });
 
         this.resumeText = new Geometry(this.scene);
         this.resumeText.make("text")(" My Resume", font, 2, 0.3, 12);
 
         this.resumeText.place([24.3, 17, 24], [0, -0.1, 0], "black");
         this.resumeText.mesh.cursor = "pointer";
+        this.resumeText.mesh.on("touchstart", function (ev) {
+          $("#resumeModal").modal().show();
+        });
         this.resumeText.mesh.on("click", function (ev) {
           $("#resumeModal").modal().show();
+        });
+
+        this.pastText = new Geometry(this.scene);
+        this.pastText.make("text")("Visit Portfolio", font, 1.2, 0.3, 12);
+
+        this.pastText.place([3, 1.2, 63], [0, 0.9, 0], "black");
+        this.pastText.mesh.cursor = "pointer";
+        this.pastText.mesh.on("touchstart", function (ev) {
+          window.location.replace("/portfolio");
+        });
+        this.pastText.mesh.on("click", function (ev) {
+          window.location.replace("/portfolio");
         });
       });
 
@@ -130,6 +148,12 @@ export default class Main {
         console.log(`${item}: ${loaded} ${total}`);
       };
 
+      const interaction = new Interaction(
+        this.renderer.threeRenderer,
+        this.scene,
+        this.camera.threeCamera
+      );
+
       // All loaders done now
       this.manager.onLoad = () => {
         this.mjModelAnimation = new Animation(
@@ -138,12 +162,6 @@ export default class Main {
         );
 
         this.light.ambientLight.position.set(15, 2, 70);
-
-        const interaction = new Interaction(
-          this.renderer.threeRenderer,
-          this.scene,
-          this.camera.threeCamera
-        );
 
         // Add dat.GUI controls if dev
         if (Config.isDev) {
@@ -162,7 +180,6 @@ export default class Main {
     // Start render which does not wait for model fully loaded
     this.render();
     this.updateSun();
-    window.addEventListener("resize", this.onWindowResize, false);
   }
 
   render() {
@@ -188,7 +205,7 @@ export default class Main {
 
     this.water.material.uniforms["time"].value += 1.0 / 60.0;
     if (this.water.material.uniforms["size"].value < 100) {
-      this.water.material.uniforms["size"].value += 0.5;
+      this.water.material.uniforms["size"].value += 2;
     }
     this.renderer.threeRenderer.toneMappingExposure = 0.06;
 
@@ -220,7 +237,7 @@ export default class Main {
       alpha: 1.0,
       sunDirection: new THREE.Vector3(),
       sunColor: 0xffffff,
-      waterColor: 0x001e0f,
+      waterColor: 0x9cd3db,
       distortionScale: 3.7,
       fog: this.scene.fog !== undefined,
     });
@@ -271,19 +288,19 @@ export default class Main {
     this.tetrahedron.place(
       [-60, 20, -20],
       [time * 0.5, null, time * 0.51],
-      "red"
+      "#A0150D"
     );
 
     this.box = new Geometry(this.scene);
     this.box.make("box")();
-    this.box.place([-30, 20, -30], [time * 0.5, null, time * 0.51], "green");
+    this.box.place([-30, 20, -30], [time * 0.5, null, time * 0.51], "#04AC03");
 
     this.octahedron = new Geometry(this.scene);
     this.octahedron.make("octahedron")();
     this.octahedron.place(
       [0, 20, -40],
       [time * 0.5, null, time * 0.51],
-      "yellow"
+      "#F9E82E"
     );
 
     this.dodecahedron = new Geometry(this.scene);
@@ -291,7 +308,7 @@ export default class Main {
     this.dodecahedron.place(
       [30, 20, -30],
       [-time * 0.5, null, time * 0.51],
-      "blue"
+      "#957006"
     );
 
     this.icosahedron = new Geometry(this.scene);
@@ -299,7 +316,7 @@ export default class Main {
     this.icosahedron.place(
       [60, 20, -20],
       [-time * 0.5, null, time * 0.51],
-      "black"
+      "#1B63BA"
     );
   }
 
@@ -315,12 +332,5 @@ export default class Main {
     if (this.resumeModel && this.resumeModel.obj) {
       this.resumeModel.obj.rotation.y = -time * 0.2;
     }
-  }
-
-  onWindowResize() {
-    this.camera.threeCamera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.threeCamera.updateProjectionMatrix();
-
-    this.renderer.threeRenderer.setSize(window.innerWidth, window.innerHeight);
   }
 }

@@ -30,7 +30,7 @@ export default {
       type: "object",
     },
     {
-      path: "./assets/models/mailbox/scene.gltf",
+      path: "./assets/models/mailbox.gltf",
       scale: 0.1,
       type: "gltf",
       position: {
@@ -45,13 +45,13 @@ export default {
       },
     },
     {
-      path: "./assets/models/mjmodel/untitled.gltf",
+      path: "./assets/models/newme.gltf",
       scale: 20,
       type: "gltf",
       position: {
-        x: 15,
+        x: 9,
         y: 2,
-        z: 20,
+        z: 15,
       },
       rotation: {
         x: 0,
@@ -60,7 +60,7 @@ export default {
       },
     },
     {
-      path: "./assets/models/book/scene.gltf",
+      path: "./assets/models/book.gltf",
       scale: 0.015,
       type: "gltf",
       position: {
@@ -109,10 +109,10 @@ export default {
     autoRotateSpeed: -0.5,
     rotateSpeed: 0.5,
     zoomSpeed: 1,
-    minDistance: -Infinity,
-    maxDistance: Infinity,
+    minDistance: 60,
+    maxDistance: 200,
     minPolarAngle: Math.PI / 5,
-    maxPolarAngle: Infinity,
+    maxPolarAngle: Math.PI * 0.495,
     minAzimuthAngle: -Infinity,
     maxAzimuthAngle: Infinity,
     enableDamping: true,

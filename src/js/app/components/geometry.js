@@ -87,6 +87,7 @@ export default class Geometry {
 
   place(position = null, rotation = null, meshColor = 0xeeeeee) {
     const material = new Material(meshColor).standard;
+    material.roughness = 0;
     this.mesh = new THREE.Mesh(this.geo, material);
 
     // Use ES6 spread to set position and rotation from passed in array
