@@ -358,6 +358,12 @@ export default class Main {
     // calculate objects intersecting the picking ray
     const intersects = this.raycaster.intersectObjects(this.scene.children);
 
+    for (let i = 0; i < intersects.length; i++) {
+      if (intersects[i].object.name == "Contact Me") {
+        alert("Dd");
+      }
+    }
+
     console.log(intersects);
   }
 }
