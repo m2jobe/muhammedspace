@@ -85,7 +85,7 @@ export default class Geometry {
     }
   }
 
-  place(position = null, rotation = null, meshColor = 0xeeeeee) {
+  place(position = null, rotation = null, meshColor = 0xeeeeee, name = null) {
     const material = new Material(meshColor).standard;
     material.roughness = 0;
     this.mesh = new THREE.Mesh(this.geo, material);
@@ -101,6 +101,8 @@ export default class Geometry {
     if (Config.shadow.enabled) {
       this.mesh.receiveShadow = true;
     }
+
+    this.mesh.name = name;
 
     this.scene.add(this.mesh);
 

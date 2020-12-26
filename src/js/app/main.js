@@ -53,6 +53,9 @@ export default class Main {
     //the sun
     this.sun = new THREE.Vector3();
 
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
+
     // for the sun
     this.pmremGenerator = new THREE.PMREMGenerator(this.renderer.threeRenderer);
 
@@ -99,11 +102,13 @@ export default class Main {
         this.contactMeText = new Geometry(this.scene);
         this.contactMeText.make("text")("Contact Me", font, 2, 0.3, 12);
 
-        this.contactMeText.place([-21, 16, 30], [0, 0.1, 0], "black");
+        this.contactMeText.place(
+          [-21, 16, 30],
+          [0, 0.1, 0],
+          "black",
+          "Contact Me"
+        );
         this.contactMeText.mesh.cursor = "pointer";
-        this.resumeText.mesh.on("touchend", function (ev) {
-          $("#contactModal").modal().show();
-        });
 
         this.resumeText = new Geometry(this.scene);
         this.resumeText.make("text")(" My Resume", font, 2, 0.3, 12);
@@ -177,6 +182,14 @@ export default class Main {
     // Start render which does not wait for model fully loaded
     this.render();
     this.updateSun();
+
+    document.addEventListener(
+      "touchend",
+      function (e) {
+        this.onDocumentTouchEnd(e);
+      }.bind(this),
+      false
+    );
   }
 
   render() {
@@ -329,5 +342,22 @@ export default class Main {
     if (this.resumeModel && this.resumeModel.obj) {
       this.resumeModel.obj.rotation.y = -time * 0.2;
     }
+  }
+
+  onDocumentTouchEnd(event) {
+    // calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+
+    this.mouse.x =
+      (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
+    this.mouse.y =
+      -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+    // update the picking ray with the camera and mouse position
+    this.raycaster.setFromCamera(this.mouse, this.camera.threeCamera);
+
+    // calculate objects intersecting the picking ray
+    const intersects = this.raycaster.intersectObjects(this.scene.children);
+
+    console.log(intersects);
   }
 }
