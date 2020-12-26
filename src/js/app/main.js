@@ -108,6 +108,14 @@ export default class Main {
           $("#contactModal").modal().show();
         });
 
+        this.contactMeText.mesh.on("touchend", (ev) => {
+          $("#contactModal").modal().show();
+        });
+
+        this.contactMeText.mesh.on("mousedown", (ev) => {
+          $("#contactModal").modal().show();
+        });
+
         this.resumeText = new Geometry(this.scene);
         this.resumeText.make("text")(" My Resume", font, 2, 0.3, 12);
 

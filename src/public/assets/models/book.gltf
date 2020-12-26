@@ -95,13 +95,13 @@
   "extensionsUsed": ["KHR_materials_pbrSpecularGlossiness"],
   "images": [
     {
-      "uri": "textures/Scene_-_Root_diffuse.png"
+      "uri": "Scene_-_Root_diffuse.png"
     },
     {
-      "uri": "textures/Scene_-_Root_specularGlossiness.png"
+      "uri": "Scene_-_Root_specularGlossiness.png"
     },
     {
-      "uri": "textures/Scene_-_Root_normal.png"
+      "uri": "Scene_-_Root_normal.png"
     }
   ],
   "materials": [
