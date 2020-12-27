@@ -170,7 +170,7 @@ export default class Main {
     );
 
     document.addEventListener(
-      "touchstart",
+      "touchend",
       function (e) {
         this.onDocumentTouchEnd(e);
       }.bind(this),
