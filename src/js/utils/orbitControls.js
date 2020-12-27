@@ -300,7 +300,7 @@ module.exports = function (THREE) {
     };
 
     // Set to false to disable this control
-    this.enabled = true;
+    this.enabled = false;
 
     // center is old, deprecated; use "target" instead
     this.center = this.target;
