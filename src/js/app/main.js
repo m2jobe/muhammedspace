@@ -365,10 +365,9 @@ export default class Main {
 
     console.log(this.mouse);
 
-    console.log(intersects);
+    console.log(this.tetrahedron);
 
     intersects.forEach((i) => {
-      console.log(i);
       if (i.object.name == "Contact Me") {
         $("#contactModal").modal().show();
       }
