@@ -107,7 +107,7 @@ export default class Main {
         this.contactMeTouchPlane.make("plane")(15, 20);
 
         this.contactMeTouchPlane.place(
-          [-14, 10, 30],
+          [-14, 10, 35],
           [0, 0.1, 0],
           "white",
           "Contact Me",
