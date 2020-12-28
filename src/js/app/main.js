@@ -363,7 +363,11 @@ export default class Main {
 
     this.rayCaster.setFromCamera(this.mouse, this.camera.threeCamera);
 
-    var intersects = this.rayCaster.intersectObjects(this.scene.children);
+    var objects = [];
+
+    objects.push(this.tetrahedron);
+
+    var intersects = this.rayCaster.intersectObjects(objects, true);
 
     console.log(this.mouse);
 

@@ -422,6 +422,34 @@ module.exports = function (THREE) {
 
     function onMouseDown(event) {
       if (scope.enabled === false) return;
+
+      event.preventDefault();
+
+      if (event.button === scope.mouseButtons.ORBIT) {
+        if (scope.enableRotate === false) return;
+
+        state = STATE.ROTATE;
+
+        rotateStart.set(event.clientX, event.clientY);
+      } else if (event.button === scope.mouseButtons.ZOOM) {
+        if (scope.enableZoom === false) return;
+
+        state = STATE.DOLLY;
+
+        dollyStart.set(event.clientX, event.clientY);
+      } else if (event.button === scope.mouseButtons.PAN) {
+        if (scope.enablePan === false) return;
+
+        state = STATE.PAN;
+
+        panStart.set(event.clientX, event.clientY);
+      }
+
+      if (state !== STATE.NONE) {
+        document.addEventListener("mousemove", onMouseMove, false);
+        document.addEventListener("mouseup", onMouseUp, false);
+        scope.dispatchEvent(startEvent);
+      }
     }
 
     function onMouseMove(event) {
@@ -555,7 +583,6 @@ module.exports = function (THREE) {
     }
 
     function touchstart(event) {
-      console.log("touched");
       if (scope.enabled === false) return;
 
       switch (event.touches.length) {
