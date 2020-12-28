@@ -162,14 +162,6 @@ export default class Main {
     this.updateSun();
 
     document.addEventListener(
-      "mousedown",
-      function (e) {
-        this.onDocumentTouchEnd(e);
-      }.bind(this),
-      false
-    );
-
-    document.addEventListener(
       "touchend",
       function (e) {
         this.onDocumentTouchEnd(e);
@@ -320,7 +312,7 @@ export default class Main {
   spinPlatonics() {
     const time = performance.now() * 0.001;
 
-    this.tetrahedron.rotate([time * 0.5, null, time * 0.51]);
+    // this.tetrahedron.rotate([time * 0.5, null, time * 0.51]);
     this.box.rotate([time * 0.5, null, time * 0.51]);
     this.octahedron.rotate([time * 0.5, null, time * 0.51]);
     this.dodecahedron.rotate([-time * 0.5, null, time * 0.51]);
