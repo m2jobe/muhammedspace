@@ -109,7 +109,7 @@ export default class Main {
         );
 
         this.resumeText = new Geometry(this.scene);
-        this.resumeText.make("text")(" My Resume", font, 2, 0.3, 12);
+        this.resumeText.make("text")("Resume", font, 2, 0.3, 12);
 
         this.resumeText.place([24.3, 17, 24], [0, -0.1, 0], "black");
 

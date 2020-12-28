@@ -300,7 +300,7 @@ module.exports = function (THREE) {
     };
 
     // Set to false to disable this control
-    this.enabled = false;
+    this.enabled = true;
 
     // center is old, deprecated; use "target" instead
     this.center = this.target;
@@ -583,6 +583,7 @@ module.exports = function (THREE) {
     }
 
     function touchstart(event) {
+      console.log("touched");
       if (scope.enabled === false) return;
 
       switch (event.touches.length) {
