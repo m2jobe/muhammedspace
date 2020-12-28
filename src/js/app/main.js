@@ -101,11 +101,18 @@ export default class Main {
         this.contactMeText = new Geometry(this.scene);
         this.contactMeText.make("text")("Contact Me", font, 2, 0.3, 12);
 
-        this.contactMeText.place(
-          [-21, 16, 30],
+        this.contactMeText.place([-21, 16, 30], [0, 0.1, 0], "black");
+
+        this.contactMeTouchPlane = new Geometry(this.scene);
+        this.contactMeTouchPlane.make("plane")(20, 20);
+
+        this.contactMeTouchPlane.place(
+          [-15, 16, 30],
           [0, 0.1, 0],
-          "black",
-          "Contact Me"
+          "white",
+          "Contact Me",
+          0,
+          true
         );
 
         this.resumeText = new Geometry(this.scene);
@@ -162,7 +169,7 @@ export default class Main {
     this.updateSun();
 
     document.addEventListener(
-      "touchend",
+      "mousedown",
       function (e) {
         this.onDocumentTouchEnd(e);
       }.bind(this),
@@ -312,7 +319,7 @@ export default class Main {
   spinPlatonics() {
     const time = performance.now() * 0.001;
 
-    // this.tetrahedron.rotate([time * 0.5, null, time * 0.51]);
+    this.tetrahedron.rotate([time * 0.5, null, time * 0.51]);
     this.box.rotate([time * 0.5, null, time * 0.51]);
     this.octahedron.rotate([time * 0.5, null, time * 0.51]);
     this.dodecahedron.rotate([-time * 0.5, null, time * 0.51]);
@@ -363,9 +370,6 @@ export default class Main {
     intersects.forEach((i) => {
       console.log(i);
       if (i.object.name == "Contact Me") {
-        $("#contactModal").modal().show();
-      }
-      if (i.object.name == "tetrahedon") {
         $("#contactModal").modal().show();
       }
     });

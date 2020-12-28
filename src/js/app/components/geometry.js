@@ -85,8 +85,19 @@ export default class Geometry {
     }
   }
 
-  place(position = null, rotation = null, meshColor = 0xeeeeee, name = null) {
-    const material = new Material(meshColor).standard;
+  place(
+    position = null,
+    rotation = null,
+    meshColor = 0xeeeeee,
+    name = null,
+    opacity = 1,
+    transparent = false
+  ) {
+    const material = new THREE.MeshPhongMaterial({
+      color: meshColor,
+      opacity: opacity,
+      transparent: transparent,
+    });
     material.roughness = 0;
     this.mesh = new THREE.Mesh(this.geo, material);
 
