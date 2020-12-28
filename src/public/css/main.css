@@ -75,3 +75,9 @@ body {
   top: calc(50% - 8px);
   left: calc(50% - 35px); }
 
+.contactMe {
+  display: inline-flex;
+  position: absolute;
+  top: 10px;
+  left: calc(50% - 35px); }
+

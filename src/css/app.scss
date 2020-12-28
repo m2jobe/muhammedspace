@@ -1,9 +1,20 @@
 // Utils
-@import './utils/normalize';
+@import "./utils/normalize";
 
 // App
-@import './app/base';
-@import './app/main';
+@import "./app/base";
+@import "./app/main";
 
 // Components
-@import './components/loading';
+@import "./components/loading";
+
+.contactMe {
+  display: inline-flex;
+  position: absolute;
+  top: 10px;
+  width: 100%;
+}
+
+.contactMe button {
+  margin: 0 auto;
+}

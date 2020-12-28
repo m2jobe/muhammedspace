@@ -103,22 +103,10 @@ export default class Main {
 
         this.contactMeText.place([-21, 16, 30], [0, 0.1, 0], "black");
 
-        this.contactMeTouchPlane = new Geometry(this.scene);
-        this.contactMeTouchPlane.make("plane")(15, 20);
-
-        this.contactMeTouchPlane.place(
-          [-14, 10, 35],
-          [0, 0.1, 0],
-          "white",
-          "Contact Me",
-          1,
-          false
-        );
-
         this.resumeText = new Geometry(this.scene);
         this.resumeText.make("text")("Resume", font, 2, 0.3, 12);
 
-        this.resumeText.place([24.3, 17, 24], [0, -0.1, 0], "black");
+        this.resumeText.place([28, 17, 24], [0, -0.1, 0], "black");
 
         this.pastText = new Geometry(this.scene);
         this.pastText.make("text")("Visit Portfolio", font, 1.2, 0.3, 12);
@@ -342,7 +330,6 @@ export default class Main {
       var touch = evt.touches[0] || evt.changedTouches[0];
       x = touch.clientX;
       y = touch.clientY;
-      console.log("using touch");
     } else if (
       e.type == "mousedown" ||
       e.type == "mouseup" ||
@@ -352,8 +339,6 @@ export default class Main {
       e.type == "mouseenter" ||
       e.type == "mouseleave"
     ) {
-      console.log("using mouse");
-
       x = e.clientX;
       y = e.clientY;
     }
@@ -363,16 +348,9 @@ export default class Main {
 
     this.rayCaster.setFromCamera(this.mouse, this.camera.threeCamera);
 
-    var objects = [];
-
-    objects.push(this.tetrahedron);
-
-    var intersects = this.rayCaster.intersectObjects(objects, true);
-
-    console.log(this.mouse);
+    var intersects = this.rayCaster.intersectObjects(this.scene.children, true);
 
     intersects.forEach((i) => {
-      console.log(i);
       if (i.object.name == "Contact Me") {
         $("#contactModal").modal().show();
       }
