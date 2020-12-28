@@ -343,6 +343,7 @@ export default class Main {
       var touch = evt.touches[0] || evt.changedTouches[0];
       x = touch.clientX;
       y = touch.clientY;
+      console.log("using touch");
     } else if (
       e.type == "mousedown" ||
       e.type == "mouseup" ||
@@ -352,6 +353,8 @@ export default class Main {
       e.type == "mouseenter" ||
       e.type == "mouseleave"
     ) {
+      console.log("using mouse");
+
       x = e.clientX;
       y = e.clientY;
     }
@@ -365,9 +368,8 @@ export default class Main {
 
     console.log(this.mouse);
 
-    console.log(this.tetrahedron);
-
     intersects.forEach((i) => {
+      console.log(i);
       if (i.object.name == "Contact Me") {
         $("#contactModal").modal().show();
       }
