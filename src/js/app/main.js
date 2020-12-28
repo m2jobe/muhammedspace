@@ -94,26 +94,6 @@ export default class Main {
       this.manager = new THREE.LoadingManager();
 
       // Textures loaded, load contact text and model
-
-      const loader = new THREE.FontLoader();
-
-      loader.load("./assets/fonts/helvetiker_regular.typeface.json", (font) => {
-        this.contactMeText = new Geometry(this.scene);
-        this.contactMeText.make("text")("Contact Me", font, 2, 0.3, 12);
-
-        this.contactMeText.place([-21, 16, 30], [0, 0.1, 0], "black");
-
-        this.resumeText = new Geometry(this.scene);
-        this.resumeText.make("text")("Resume", font, 2, 0.3, 12);
-
-        this.resumeText.place([28, 17, 24], [0, -0.1, 0], "black");
-
-        this.pastText = new Geometry(this.scene);
-        this.pastText.make("text")("Visit Portfolio", font, 1.2, 0.3, 12);
-
-        this.pastText.place([3, 1.2, 63], [0, 0.9, 0], "black");
-      });
-
       this.postboxModel = new Model(this.scene, this.manager);
       this.postboxModel.load(Config.models[Config.model.selected].type, 2);
 
@@ -155,14 +135,6 @@ export default class Main {
     // Start render which does not wait for model fully loaded
     this.render();
     this.updateSun();
-
-    document.addEventListener(
-      "mousedown",
-      function (e) {
-        this.onDocumentTouchEnd(e);
-      }.bind(this),
-      false
-    );
   }
 
   render() {
@@ -316,44 +288,5 @@ export default class Main {
     if (this.resumeModel && this.resumeModel.obj) {
       this.resumeModel.obj.rotation.y = -time * 0.2;
     }
-  }
-
-  onDocumentTouchEnd(e) {
-    let x, y;
-    if (
-      e.type == "touchstart" ||
-      e.type == "touchmove" ||
-      e.type == "touchend" ||
-      e.type == "touchcancel"
-    ) {
-      var evt = typeof e.originalEvent === "undefined" ? e : e.originalEvent;
-      var touch = evt.touches[0] || evt.changedTouches[0];
-      x = touch.clientX;
-      y = touch.clientY;
-    } else if (
-      e.type == "mousedown" ||
-      e.type == "mouseup" ||
-      e.type == "mousemove" ||
-      e.type == "mouseover" ||
-      e.type == "mouseout" ||
-      e.type == "mouseenter" ||
-      e.type == "mouseleave"
-    ) {
-      x = e.clientX;
-      y = e.clientY;
-    }
-
-    this.mouse.x = (x / window.innerWidth) * 2 - 1;
-    this.mouse.y = -(y / window.innerHeight) * 2 + 1;
-
-    this.rayCaster.setFromCamera(this.mouse, this.camera.threeCamera);
-
-    var intersects = this.rayCaster.intersectObjects(this.scene.children, true);
-
-    intersects.forEach((i) => {
-      if (i.object.name == "Contact Me") {
-        $("#contactModal").modal().show();
-      }
-    });
   }
 }
