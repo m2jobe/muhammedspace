@@ -12,16 +12,9 @@ import Light from "./components/light";
 import Controls from "./components/controls";
 import Geometry from "./components/geometry";
 
-// Helpers
-import Stats from "./helpers/stats";
-import MeshHelper from "./helpers/meshHelper";
-
 // Model
 import Texture from "./model/texture";
 import Model from "./model/model";
-
-// Managers
-import DatGUI from "./managers/datGUI";
 
 // data
 import Config from "../data/config";
@@ -75,17 +68,6 @@ export default class Main {
     this.geometry.make("plane")(150, 150, 10, 10);
     this.geometry.place([0, -20, 0], [Math.PI / 2, 0, 0]);*/
 
-    // Set up rStats if dev environment
-    if (Config.isDev && Config.isShowingStats) {
-      this.stats = new Stats(this.renderer);
-      this.stats.setUp();
-    }
-
-    // Set up gui
-    if (Config.isDev) {
-      this.gui = new DatGUI(this);
-    }
-
     // Instantiate texture class
     this.texture = new Texture();
 
@@ -118,14 +100,6 @@ export default class Main {
 
         this.light.ambientLight.position.set(15, 2, 70);
 
-        // Add dat.GUI controls if dev
-        if (Config.isDev) {
-          this.meshHelper = new MeshHelper(this.scene, this.postboxModel.obj);
-          if (Config.mesh.enableHelper) this.meshHelper.enable();
-
-          this.gui.load(this, this.postboxModel.obj);
-        }
-
         // Everything is now fully loaded
         Config.isLoaded = true;
         this.container.querySelector("#loading").style.display = "none";
@@ -138,18 +112,8 @@ export default class Main {
   }
 
   render() {
-    // Render rStats if Dev
-    if (Config.isDev && Config.isShowingStats) {
-      Stats.start();
-    }
-
     // Call render function and pass in created scene and camera
     this.renderer.render(this.scene, this.camera.threeCamera);
-
-    // rStats has finished determining render call now
-    if (Config.isDev && Config.isShowingStats) {
-      Stats.end();
-    }
 
     // Delta time is sometimes needed for certain updates
     //const delta = this.clock.getDelta();
