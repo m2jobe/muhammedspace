@@ -104,15 +104,15 @@ export default class Main {
         this.contactMeText.place([-21, 16, 30], [0, 0.1, 0], "black");
 
         this.contactMeTouchPlane = new Geometry(this.scene);
-        this.contactMeTouchPlane.make("plane")(20, 20);
+        this.contactMeTouchPlane.make("plane")(15, 20);
 
         this.contactMeTouchPlane.place(
-          [-15, 16, 30],
+          [-14, 10, 30],
           [0, 0.1, 0],
           "white",
           "Contact Me",
-          0,
-          true
+          1,
+          false
         );
 
         this.resumeText = new Geometry(this.scene);
